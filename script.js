@@ -214,7 +214,7 @@ function launchAnim(n) {
   }
   const fns = [,
     animCover, animAgenda, animShannon, animTaxo, animPSD,
-    animFHSSBlock, animFHSSTF, animSlowFast, animPN, animBarker, animDSSS, animDSSSSim, animPG, animHUD,
+    animFHSSBlock, animFHSSTF, animSlowFast, animPN, animBarker, animBarkerDash, animDSSS, animDSSSSim, animPG, animHUD,
     animAJ, animCDMA, animBluetooth, animApps, animRAKE, animConclusion
   ];
   if (fns[n]) fns[n]();
@@ -2267,7 +2267,7 @@ function animDSSS(){
       }
     }
     
-    t++;rafMap[20]=requestAnimationFrame(draw);
+    t++;rafMap[12]=requestAnimationFrame(draw);
   }
   
   // Clean up inline styles if leaving
@@ -2426,7 +2426,7 @@ function animDSSSSim(){
     }
     
     t++;
-    rafMap[12] = requestAnimationFrame(draw);
+    rafMap[13] = requestAnimationFrame(draw);
   }
   
   draw();
@@ -2593,7 +2593,7 @@ function animHUD() {
     
     ctx.restore();
     hudT++;
-    rafMap[14] = requestAnimationFrame(draw);
+    rafMap[15] = requestAnimationFrame(draw);
   }
   
   draw();
@@ -2772,7 +2772,7 @@ function animPG(){
     }
     
     t++;
-    rafMap[13] = requestAnimationFrame(draw);
+    rafMap[14] = requestAnimationFrame(draw);
   }
   
   draw();
@@ -3178,7 +3178,7 @@ function animRAKE(){
     }
     
     rakeT++;
-    rafMap[19] = requestAnimationFrame(draw);
+    rafMap[20] = requestAnimationFrame(draw);
   }
   
   draw();
@@ -3223,7 +3223,7 @@ function animAJ(){
     if (cvLPI_) drawAJPanel(cvLPI_, 'lpi', ajT, false, false);
     
     ajT++;
-    rafMap[15] = requestAnimationFrame(draw);
+    rafMap[16] = requestAnimationFrame(draw);
   }
   draw();
 }
@@ -3419,7 +3419,7 @@ function animCDMA(){
     if(!document.getElementById('s14').classList.contains('active')) return;
     drawCDMAPanel(cv, cdmaT, cdmaMacroActive, cdmaMacroUser);
     cdmaT++;
-    rafMap[16] = requestAnimationFrame(draw);
+    rafMap[17] = requestAnimationFrame(draw);
   }
   draw();
 }
@@ -3611,7 +3611,7 @@ function animBluetooth(){
     if (cvMap) drawAFHMap(cvMap, afhT, isAfhHovered, counter);
     
     afhT++;
-    rafMap[17] = requestAnimationFrame(draw);
+    rafMap[18] = requestAnimationFrame(draw);
   }
   draw();
 }
@@ -3835,7 +3835,7 @@ function animApps(){
     drawGPS(appsT);
     drawWifi(appsT, wifiMouse);
     appsT++;
-    rafMap[18] = requestAnimationFrame(draw);
+    rafMap[19] = requestAnimationFrame(draw);
   }
   draw();
 }
@@ -4089,7 +4089,7 @@ function animConclusion(){
     
     drawTimeline(concT);
     concT++;
-    rafMap[19]=requestAnimationFrame(draw);
+    rafMap[21]=requestAnimationFrame(draw);
   }
   draw();
 }
@@ -4317,4 +4317,142 @@ function animBarker() {
     rafMap[10] = requestAnimationFrame(draw);
   }
   draw();
+}
+
+// ════════════════════════════════════════
+// S11-2 · BARKER DASHBOARD (CHIP x CHIP)
+// ════════════════════════════════════════
+function animBarkerDash() {
+  const row1 = document.getElementById('bkd-row1');
+  const row2 = document.getElementById('bkd-row2');
+  const row3 = document.getElementById('bkd-row3');
+  const slider = document.getElementById('bkd-lag-slider');
+  const lagVal = document.getElementById('bkd-lag-val');
+  const sumVal = document.getElementById('bkd-sum-val');
+  const energyBar = document.getElementById('bkd-energy-bar');
+  const ledBulb = document.getElementById('bkd-led-bulb');
+  const ledText = document.getElementById('bkd-led-text');
+  
+  if (!row1 || !row2 || !row3) return;
+  
+  const barker = [1, -1, 1, 1, -1, 1, 1, 1, -1, -1, -1];
+  const blockW = 38;
+  const gap = 4;
+  const fullW = barker.length * (blockW + gap);
+  
+  if (row1.children.length === 0) {
+     barker.forEach((val, i) => {
+        const b1 = document.createElement('div');
+        b1.className = 'bkd-block';
+        b1.innerHTML = val > 0 ? '+1' : '-1';
+        b1.style.background = val > 0 ? 'rgba(0,212,255,0.1)' : 'rgba(244,63,94,0.1)';
+        b1.style.border = `1px solid ${val > 0 ? '#00d4ff' : '#f43f5e'}`;
+        b1.style.color = val > 0 ? '#00d4ff' : '#f43f5e';
+        row1.appendChild(b1);
+        
+        const b2 = document.createElement('div');
+        b2.className = 'bkd-block';
+        b2.innerHTML = val > 0 ? '+1' : '-1';
+        b2.style.background = val > 0 ? 'rgba(245,158,11,0.1)' : 'rgba(244,63,94,0.1)';
+        b2.style.border = `1px solid ${val > 0 ? '#f59e0b' : '#f43f5e'}`;
+        b2.style.color = val > 0 ? '#f59e0b' : '#f43f5e';
+        row2.appendChild(b2);
+        
+        const b3 = document.createElement('div');
+        b3.className = 'bkd-block';
+        b3.id = `bkd-res-${i}`;
+        row3.appendChild(b3);
+     });
+  }
+  
+  function updateDash() {
+     const lag = parseInt(slider.value);
+     lagVal.innerText = lag > 0 ? '+' + lag : lag;
+     
+     const offsetPx = lag * (blockW + gap);
+     row2.style.transform = `translateX(calc(-50% + ${offsetPx}px))`;
+     
+     let sum = 0;
+     const resBlocks = row3.children;
+     
+     for (let i = 0; i < barker.length; i++) {
+        const j = i - lag;
+        const rb = resBlocks[i];
+        
+        if (j >= 0 && j < barker.length) {
+           const mult = barker[i] * barker[j];
+           sum += mult;
+           rb.innerHTML = mult > 0 ? '+1' : '-1';
+           rb.style.opacity = '1';
+           if (lag === 0) {
+              rb.style.background = 'rgba(0,200,150,0.3)';
+              rb.style.border = '1px solid #00c896';
+              rb.style.color = '#00c896';
+              rb.style.boxShadow = '0 0 15px #00c896';
+           } else {
+              rb.style.background = mult > 0 ? 'rgba(217,70,239,0.1)' : 'rgba(255,255,255,0.05)';
+              rb.style.border = `1px solid ${mult > 0 ? '#d946ef' : 'rgba(255,255,255,0.2)'}`;
+              rb.style.color = mult > 0 ? '#d946ef' : 'rgba(255,255,255,0.5)';
+              rb.style.boxShadow = 'none';
+           }
+        } else {
+           rb.innerHTML = '';
+           rb.style.opacity = '0.2';
+           rb.style.background = 'transparent';
+           rb.style.border = '1px dashed rgba(255,255,255,0.2)';
+           rb.style.boxShadow = 'none';
+        }
+     }
+     
+     sumVal.innerText = sum > 0 ? '+' + sum : sum;
+     
+     if (lag === 0) {
+        energyBar.style.width = '100%';
+        energyBar.style.background = '#00c896';
+        energyBar.style.boxShadow = '0 0 20px #00c896';
+        
+        ledBulb.style.background = '#00c896';
+        ledBulb.style.boxShadow = '0 0 20px #00c896';
+        ledText.innerText = '¡ALERTA: SEÑAL ENGANCHADA (LOCK)!';
+        ledText.style.color = '#00c896';
+        ledText.style.textShadow = '0 0 10px #00c896';
+     } else {
+        const pct = Math.max(0, Math.min(100, (Math.abs(sum) / 11) * 100));
+        energyBar.style.width = Math.max(5, pct) + '%';
+        energyBar.style.background = 'rgba(255,255,255,0.3)';
+        energyBar.style.boxShadow = 'none';
+        
+        ledBulb.style.background = '#f59e0b';
+        ledBulb.style.boxShadow = '0 0 10px #f59e0b';
+        ledText.innerText = 'BUSCANDO...';
+        ledText.style.color = '#f59e0b';
+        ledText.style.textShadow = '0 0 10px #f59e0b';
+     }
+  }
+  
+  slider.oninput = updateDash;
+  updateDash();
+  
+  if (!document.getElementById('bkd-styles')) {
+     const st = document.createElement('style');
+     st.id = 'bkd-styles';
+     st.innerHTML = `
+        .bkd-block {
+           width: 38px; height: 40px; border-radius: 6px;
+           display: flex; align-items: center; justify-content: center;
+           font-family: var(--mono); font-weight: bold; font-size: 1.1rem;
+           transition: all 0.2s;
+        }
+        input[type=range]#bkd-lag-slider {
+           -webkit-appearance: none; background: rgba(255,255,255,0.1);
+           height: 4px; border-radius: 2px; outline: none;
+        }
+        input[type=range]#bkd-lag-slider::-webkit-slider-thumb {
+           -webkit-appearance: none; width: 16px; height: 16px;
+           border-radius: 50%; background: #00d4ff; box-shadow: 0 0 10px #00d4ff;
+           cursor: pointer;
+        }
+     `;
+     document.head.appendChild(st);
+  }
 }

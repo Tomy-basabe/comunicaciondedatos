@@ -386,6 +386,77 @@
   </div>
 </article>
 
+<!-- S11-2 BARKER DASHBOARD -->
+<article class="slide" id="s11-dashboard" data-chapter="Barker Autocorrelación"
+ data-notes="Dashboard interactivo que demuestra la propiedad matemática de la autocorrelación del código Barker-11. Moviendo el slider de desfase (Lag), podemos observar cómo la suma de las multiplicaciones chip a chip se mantiene baja (≤ 1) hasta que se alcanza el alineamiento perfecto (Lag = 0). En ese momento, la energía salta a 11, activando el detector de umbral.">
+  <div class="slide-full barker-dash-layout" style="display:flex; flex-direction:column; padding:40px; background:var(--bg1);">
+    <div class="stag" style="align-self:flex-start;">09-2</div>
+    <h2 class="stitle">Simulador Táctico · Autocorrelación Barker-11</h2>
+    <p class="ssub">Análisis de Bloques · Multiplicación Chip a Chip</p>
+
+    <!-- Dash Container -->
+    <div class="barker-dash-container" style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:20px; position:relative; background:rgba(10,15,25,0.7); border:1px solid rgba(0,212,255,0.2); border-radius:12px; padding:30px; box-shadow:0 0 30px rgba(0,0,0,0.5); margin-top:20px;">
+       
+       <!-- Grid rows -->
+       <div id="bkd-row1-wrap" style="display:flex; align-items:center; gap:20px; width:100%;">
+          <div style="width:200px; flex-shrink:0; color:var(--cyan); font-family:var(--mono); font-size:0.8rem; text-align:right;">SEÑAL RECIBIDA (AIRE)</div>
+          <div style="flex:1; display:flex; justify-content:center;">
+             <div id="bkd-row1" style="display:flex; gap:4px; width:462px;"></div>
+          </div>
+       </div>
+
+       <div id="bkd-row2-wrap" style="display:flex; align-items:center; gap:20px; width:100%;">
+          <div style="width:200px; flex-shrink:0; color:#f59e0b; font-family:var(--mono); font-size:0.8rem; text-align:right;">RÉPLICA LOCAL (ROUTER)</div>
+          <div style="flex:1; position:relative; height:40px; overflow:visible;">
+             <div id="bkd-row2" style="display:flex; gap:4px; width:462px; position:absolute; left:50%; transform:translateX(-50%); transition:transform 0.15s ease-out;"></div>
+          </div>
+       </div>
+       
+       <hr style="border:none; border-top:1px dashed rgba(255,255,255,0.1); margin:15px 0;">
+
+       <div id="bkd-row3-wrap" style="display:flex; align-items:center; gap:20px; width:100%;">
+          <div style="width:200px; flex-shrink:0; color:#d946ef; font-family:var(--mono); font-size:0.8rem; text-align:right;">CORRELADOR (MULT)</div>
+          <div style="flex:1; display:flex; justify-content:center;">
+             <div id="bkd-row3" style="display:flex; gap:4px; width:462px;"></div>
+          </div>
+       </div>
+
+       <!-- Output & Controls -->
+       <div style="display:flex; gap:40px; margin-top:40px; padding-top:30px; border-top:1px solid rgba(255,255,255,0.1);">
+          <!-- Slider -->
+          <div style="flex:1;">
+             <div style="color:var(--t2); font-family:var(--mono); font-size:0.8rem; margin-bottom:15px;">DESFASE TEMPORAL (LAG) : <span id="bkd-lag-val" style="color:white; font-weight:bold; font-size:1.1rem; margin-left:10px;">0</span></div>
+             <input type="range" id="bkd-lag-slider" min="-6" max="6" value="0" step="1" style="width:100%; cursor:pointer;">
+             <div style="display:flex; justify-content:space-between; color:rgba(255,255,255,0.3); font-size:0.75rem; margin-top:8px; font-family:var(--mono);">
+               <span>-6</span><span>-3</span><span>0</span><span>+3</span><span>+6</span>
+             </div>
+          </div>
+
+          <!-- Energy & LED -->
+          <div style="flex:2; display:flex; flex-direction:column; justify-content:center;">
+             <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+               <div style="color:var(--cyan); font-family:var(--mono); font-size:0.9rem;">VOLTAJE DE SALIDA Σ R(τ)</div>
+               <div id="bkd-sum-val" style="color:white; font-family:var(--mono); font-size:2rem; font-weight:bold; line-height:1;">11</div>
+             </div>
+             
+             <!-- Bar -->
+             <div style="width:100%; height:20px; background:rgba(255,255,255,0.05); border-radius:10px; margin-top:12px; position:relative; overflow:hidden; border:1px solid rgba(255,255,255,0.1);">
+                <div id="bkd-energy-bar" style="height:100%; width:100%; background:#00c896; box-shadow:0 0 20px #00c896; transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);"></div>
+             </div>
+             
+             <!-- LED -->
+             <div style="margin-top:25px; display:flex; align-items:center; gap:15px; background:rgba(0,0,0,0.5); padding:15px 25px; border-radius:10px; border:1px solid rgba(255,255,255,0.05);">
+                <div id="bkd-led-bulb" style="width:20px; height:20px; border-radius:50%; background:#00c896; box-shadow:0 0 20px #00c896; transition:all 0.2s;"></div>
+                <div id="bkd-led-text" style="color:#00c896; font-family:var(--mono); font-size:1.2rem; font-weight:bold; letter-spacing:0.05em; text-shadow:0 0 10px #00c896; transition:all 0.2s;">¡ALERTA: SEÑAL ENGANCHADA (LOCK)!</div>
+                <div style="margin-left:auto; color:rgba(255,255,255,0.4); font-size:0.8rem; font-family:var(--mono);">DETECTOR DE UMBRAL (TH=10)</div>
+             </div>
+          </div>
+       </div>
+
+    </div>
+  </div>
+</article>
+
 <!-- S9 DSSS -->
 <article class="slide" id="s9" data-chapter="DSSS Spreading"
  data-notes="DSSS multiplica cada bit de datos d(t) por una secuencia PN de chips de mayor velocidad c(t). La señal ensanchada s(t) = d(t)·c(t) tiene ancho de banda Bss ≈ 2Rc. En el receptor: r(t)·c(t) = d(t)·c²(t) + n(t)·c(t). Como c²(t)=1 para secuencias BPSK, se recupera d(t). El término de ruido queda ensanchado y se atenúa en Gp dB tras el filtrado. En 802.11b: Barker-11, Rc=11Mcps, Rb=1Mbps → Gp=10.4dB. La operación de desensanchamiento convierte interferencia de banda estrecha en señal de banda ancha atenuada.">
