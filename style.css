@@ -602,16 +602,18 @@ sup,sub{font-size:.62em}
   position:absolute;
   pointer-events:none;
   opacity:0;
+  visibility:hidden;
   transform:translate(-50%, -10px);
   transition:all 0.25s var(--ease-out);
-  padding:8px 10px;
-  border-radius:8px;
-  z-index:10;
+  z-index:100;
+  padding:10px 15px;
+  min-width:140px;
   display:flex;flex-direction:column;gap:5px;
   box-shadow:0 10px 25px rgba(0,0,0,0.5);
 }
 .taxo-tooltip.active{
   opacity:1;
+  visibility:visible;
   transform:translate(-50%, -25px); /* floats up */
 }
 .tt-title{font-family:var(--mono);font-size:9px;color:var(--t2);letter-spacing:.05em;text-align:center}
@@ -696,18 +698,18 @@ sup,sub{font-size:.62em}
 ════════════════════════════════════════ */
 .dsss-layout{display:flex!important;flex-direction:row;padding:0;gap:0}
 .dsss-sidebar{
-  width:clamp(200px,20vw,280px);flex-shrink:0;
+  width:clamp(240px,26vw,340px);flex-shrink:0;
   padding:clamp(16px,2.5vh,32px) clamp(14px,1.8vw,24px);
   border-right:1px solid var(--brd);
   display:flex;flex-direction:column;gap:clamp(10px,1.5vh,16px);
   overflow:hidden;
 }
 .dsss-main{flex:1;min-width:0;padding:clamp(14px,2vh,24px);position:relative}
-.eq-block{background:var(--bg4);border:1px solid var(--brd);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:3px;flex-shrink:0}
-.eq-row{display:flex;align-items:center;gap:10px;padding:3px 0}
-.eq-s{font-family:var(--mono);font-weight:700;font-size:12px;color:var(--cyan);min-width:38px;text-align:center;padding:2px 6px;background:rgba(0,212,255,.1);border-radius:4px}
-.eq-t{font-size:11px;color:var(--t3)}
-.eq-op{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--amber);text-align:center;padding:3px 0}
+.eq-block{background:var(--bg4);border:1px solid var(--brd);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.eq-row{display:flex;align-items:center;gap:12px;padding:4px 0}
+.eq-s{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--cyan);min-width:48px;text-align:center;padding:4px 8px;background:rgba(0,212,255,.1);border-radius:4px}
+.eq-t{font-size:13px;color:var(--t3)}
+.eq-op{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--amber);text-align:center;padding:4px 0}
 .eq-out .eq-s{background:rgba(0,200,150,.15);color:var(--green)}
 
 /* ════════════════════════════════════════

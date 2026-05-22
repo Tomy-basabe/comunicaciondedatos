@@ -3,7 +3,7 @@
    SPREAD SPECTRUM JS ENGINE v3
 ════════════════════════════════════════ */
 
-const TOTAL = 17;
+const TOTAL = 19;
 const TRANS_MS = 800;
 let current = 1;
 let notesOpen = false;
@@ -107,8 +107,9 @@ function goTo(n, pushHistory = true) {
   }
 
   const dir = n > current ? 1 : -1;
-  const oldEl = document.getElementById(`s${current}`);
-  const newEl = document.getElementById(`s${n}`);
+  const domSlides = document.querySelectorAll('.slide');
+  const oldEl = domSlides[current - 1];
+  const newEl = domSlides[n - 1];
   current = n;
 
   // Flash overlay
@@ -144,7 +145,7 @@ function goTo(n, pushHistory = true) {
 function showSlide(n, dir) {
   current = n;
   window.history.replaceState(null, '', '#' + n);
-  const el = document.getElementById(`s${n}`);
+  const el = document.querySelectorAll('.slide')[n - 1];
   el.classList.add('active');
   updateUI(n);
   updateNotes(el);
@@ -213,9 +214,8 @@ function launchAnim(n) {
   }
   const fns = [,
     animCover, animAgenda, animShannon, animTaxo, animPSD,
-    animFHSSBlock, animFHSSTF, animSlowFast, animDSSS, animPG,
-    animPN, animRAKE, animAJ, animCDMA, animBluetooth,
-    animApps, animConclusion
+    animFHSSBlock, animFHSSTF, animSlowFast, animPN, animBarker, animDSSS, animDSSSSim, animPG, animHUD,
+    animAJ, animCDMA, animBluetooth, animApps, animRAKE, animConclusion
   ];
   if (fns[n]) fns[n]();
 }
@@ -1576,7 +1576,7 @@ function animFHSSBlock() {
   const blocks=[
     {id:'src', x:.07,y:.22,w:.12,h:.13,label:'Fuente\nDatos',col:'#3d85ff'},
     {id:'mod', x:.22,y:.22,w:.13,h:.13,label:'Modulador\nDatos',col:'#3d85ff'},
-    {id:'mix_tx', x:.38,y:.22,w:.11,h:.13,label:'Mezclador',col:'#00d4ff'},
+    {id:'mix_tx', x:.38,y:.22,w:.11,h:.13,label:'Mezclador\nTX',col:'#00d4ff'},
     {id:'amp', x:.52,y:.22,w:.11,h:.13,label:'Amp RF\nTX',col:'#3d85ff'},
     {id:'ant_tx', x:.66,y:.22,w:.1,h:.13,label:'Antena\nTX',col:'#00c896'},
     {id:'pn', x:.38,y:.55,w:.14,h:.13,label:'Gen. PN\nLFSR',col:'#7c3aed'},
@@ -1607,8 +1607,8 @@ function animFHSSBlock() {
     // PN to Synth
     { p: [[W*.38,H*.615], [W*.35,H*.615]], type: 'pn' },
     // Synth to Mixers
-    { p: [[W*.28,H*.55], [W*.28,H*.35], [W*.38,H*.35]], type: 'synth' }, // to TX
-    { p: [[W*.28,H*.68], [W*.28,H*.825], [W*.52,H*.825]], type: 'synth' }, // to RX
+    { p: [[W*.36,H*.615], [W*.435,H*.615], [W*.435,H*.35]], type: 'synth' }, // to TX
+    { p: [[W*.36,H*.615], [W*.575,H*.615], [W*.575,H*.76]], type: 'synth' }, // to RX
   ];
 
   // Initialize particles
@@ -1704,14 +1704,14 @@ function animFHSSBlock() {
     // In original code: arrow2(W*.45,H*.55,W*.45,H*.35,'rgba(124,58,237,.5)'); This was from PN to something. Let's keep it.
     
     ctx.strokeStyle='rgba(124,58,237,.35)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
-    drawSegmentedArrow([[W*.28,H*.55], [W*.28,H*.35], [W*.38,H*.35]], `rgba(124,58,237,${0.35 + pnPulse*0.6})`);
+    drawSegmentedArrow([[W*.36,H*.615], [W*.435,H*.615], [W*.435,H*.35]], `rgba(124,58,237,${0.35 + pnPulse*0.6})`);
     
     arrow2(W*.66,rcy,W*.63,rcy,'rgba(0,200,150,.4)');
     arrow2(W*.52,rcy,W*.49,rcy,'rgba(0,200,150,.4)');
     arrow2(W*.38,rcy,W*.35,rcy,'rgba(0,200,150,.4)');
     
     ctx.strokeStyle='rgba(124,58,237,.35)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
-    drawSegmentedArrow([[W*.28,H*.68], [W*.28,H*.825], [W*.52,H*.825]], `rgba(124,58,237,${0.35 + pnPulse*0.6})`);
+    drawSegmentedArrow([[W*.36,H*.615], [W*.575,H*.615], [W*.575,H*.76]], `rgba(124,58,237,${0.35 + pnPulse*0.6})`);
     
     // Draw Particles
     particles.forEach(p => {
@@ -2169,8 +2169,8 @@ function animDSSS(){
     // Grid and Labels (Draw full)
     for(let row=0; row<rows; row++){
       const ry=row*rowH,midY=ry+rowH/2;
-      ctx.fillStyle=colors[row];ctx.font='bold 9px JetBrains Mono';ctx.textAlign='left';ctx.textBaseline='top';
-      ctx.fillText(labels[row],pad.l,ry+5);
+      ctx.fillStyle=colors[row];ctx.font='bold 12px JetBrains Mono';ctx.textAlign='left';ctx.textBaseline='top';
+      ctx.fillText(labels[row],pad.l,ry+8);
       
       ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=.5;
       ctx.beginPath();ctx.moveTo(pad.l,midY);ctx.lineTo(pad.l+pW,midY);ctx.stroke();
@@ -2181,7 +2181,7 @@ function animDSSS(){
     ctx.textBaseline='alphabetic';
     const bwL=['B_info (estrecha)','B_chip = R_c','B_ss = N·B_info'];
     for(let i=0;i<3;i++){
-      ctx.fillStyle=`rgba(${hexToRgb(colors[i])},.5)`;ctx.font='8px JetBrains Mono';ctx.textAlign='right';
+      ctx.fillStyle=`rgba(${hexToRgb(colors[i])},.5)`;ctx.font='10px JetBrains Mono';ctx.textAlign='right';
       ctx.fillText(bwL[i],W-6,(i+.5)*H/3+3);
     }
     
@@ -2192,7 +2192,7 @@ function animDSSS(){
     ctx.clip();
     
     for(let row=0; row<rows; row++){
-      const ry=row*rowH, midY=ry+rowH/2, amp=rowH/2-12;
+      const ry=row*rowH, midY=ry+rowH/2, amp=rowH/2-14;
       
       ctx.beginPath();ctx.strokeStyle=colors[row];ctx.lineWidth=2;ctx.shadowColor=colors[row];ctx.shadowBlur=5;
       if(row===0){
@@ -2242,12 +2242,12 @@ function animDSSS(){
       const sBit = dBit ^ cBit; // XOR
       
       // Floating label
-      const floatY = 2 * rowH + rowH/2 - (currentD * currentC * (rowH/2-12));
-      const tx = (scanX > W - 80) ? scanX - 6 : scanX + 6;
-      const align = (scanX > W - 80) ? 'right' : 'left';
+      const floatY = 2 * rowH + rowH/2 - (currentD * currentC * (rowH/2-14));
+      const tx = (scanX > W - 110) ? scanX - 8 : scanX + 8;
+      const align = (scanX > W - 110) ? 'right' : 'left';
       
       ctx.fillStyle = 'rgba(0,212,255,1)';
-      ctx.font = 'bold 11px JetBrains Mono';
+      ctx.font = 'bold 15px JetBrains Mono';
       ctx.textAlign = align;
       ctx.shadowColor = 'rgba(0,212,255,0.8)'; ctx.shadowBlur = 8;
       
@@ -2267,7 +2267,7 @@ function animDSSS(){
       }
     }
     
-    t++;rafMap[9]=requestAnimationFrame(draw);
+    t++;rafMap[20]=requestAnimationFrame(draw);
   }
   
   // Clean up inline styles if leaving
@@ -2278,9 +2278,327 @@ function animDSSS(){
   draw();
 }
 
+function animDSSSSim(){
+  const cv=document.getElementById('dsssSimCanvas');
+  if(!cv)return;
+  const parent=cv.parentElement;
+  cv.width=parent.offsetWidth;cv.height=parent.offsetHeight;
+  const ctx=cv.getContext('2d');
+  
+  const barker=[1,1,1,-1,-1,-1,1,-1,-1,1,-1];
+  const data=[1,1,-1,1,-1,-1];
+  const cc=barker.length*data.length;
+  
+  const noiseSlider = document.getElementById('noiseSlider');
+  const noiseValTxt = document.getElementById('noiseVal');
+  
+  let t=0;
+  function draw(){
+    if(!document.getElementById('s9-1').classList.contains('active'))return;
+    const W=cv.width,H=cv.height;
+    ctx.clearRect(0,0,W,H);
+    const rows=5,rowH=H/rows;
+    const pad={l:12,r:8};
+    const pW=W-pad.l-pad.r;
+    
+    const chipW=pW/cc,bitW=pW/data.length;
+    
+    const noiseN = parseFloat(noiseSlider.value);
+    
+    noiseValTxt.innerText = Math.round(noiseN*100) + '%';
+    
+    const labels=['d(t) · Datos','c(t) · Código PN','s(t) = d(t)·c(t)','r(t) = s(t) + n(t)','Recuperada: d(t) + n(t)·c(t) -> LPF'];
+    const colors=['#3d85ff','#7c3aed','#00d4ff','#f43f5e','#00ffc8'];
+    
+    // Draw grid & labels
+    for(let row=0; row<rows; row++){
+      const ry=row*rowH,midY=ry+rowH/2;
+      ctx.fillStyle=colors[row];ctx.font='bold 11px JetBrains Mono';ctx.textAlign='left';ctx.textBaseline='top';
+      ctx.fillText(labels[row],pad.l,ry+4);
+      
+      ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=.5;
+      ctx.beginPath();ctx.moveTo(pad.l,midY);ctx.lineTo(pad.l+pW,midY);ctx.stroke();
+      if(row<rows-1){ctx.strokeStyle='rgba(255,255,255,.05)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,ry+rowH);ctx.lineTo(W,ry+rowH);ctx.stroke();}
+    }
+    
+    const timeShift = t * 0.05; // For moving noise phase
+    
+    // Compute Arrays for continuous rendering
+    const steps = Math.floor(pW);
+    const s_arr = new Float32Array(steps);
+    const r_arr = new Float32Array(steps);
+    const c_arr = new Float32Array(steps);
+    const r_times_c = new Float32Array(steps);
+    
+    for(let i=0; i<steps; i++){
+      const x = i;
+      const bIdx = Math.min(data.length-1, Math.floor(x/bitW));
+      const cIdx = Math.min(cc-1, Math.floor(x/chipW));
+      
+      const d_val = data[bIdx];
+      const c_val = barker[cIdx % barker.length];
+      
+      s_arr[i] = d_val * c_val;
+      c_arr[i] = c_val;
+      
+      // Noise: Random combined with a slight sine wave to represent "any interference" n(t)
+      const j_val = Math.sin((x/pW * 7 * Math.PI * 2) - timeShift);
+      const n_val = (Math.random()*2 - 1);
+      
+      // Total interference n(t) scaled by slider
+      const total_n = (j_val * 0.8 + n_val * 1.2) * noiseN;
+      
+      r_arr[i] = s_arr[i] + total_n;
+      r_times_c[i] = r_arr[i] * c_val;
+    }
+    
+    // LPF Smoothing (Moving Average)
+    const d_hat = new Float32Array(steps);
+    const windowSize = Math.floor(bitW * 0.8); // Smooth over ~1 bit duration
+    for(let i=0; i<steps; i++){
+      let sum = 0;
+      let count = 0;
+      for(let w = -windowSize/2; w<=windowSize/2; w++){
+        const idx = Math.floor(i + w);
+        if(idx>=0 && idx<steps){
+          sum += r_times_c[idx];
+          count++;
+        }
+      }
+      d_hat[i] = sum / count;
+    }
+    
+    // DRAW
+    for(let row=0; row<rows; row++){
+      const ry=row*rowH, midY=ry+rowH/2, amp=rowH/2-10;
+      
+      ctx.beginPath();ctx.strokeStyle=colors[row];ctx.lineWidth=1.5;
+      if(row===0 || row===1 || row===2){
+        // Perfect digital signals
+        for(let i=0; i<steps; i++){
+          const val = row===0 ? data[Math.min(data.length-1, Math.floor(i/bitW))] : (row===1 ? c_arr[i] : s_arr[i]);
+          const x=pad.l+i, y=midY-val*amp;
+          if(i>0 && row===0){
+            const prevVal = data[Math.min(data.length-1, Math.floor((i-1)/bitW))];
+            if(prevVal !== val) ctx.lineTo(x, midY-prevVal*amp);
+          }
+          if(i>0 && row===1){
+            const prevVal = c_arr[i-1];
+            if(prevVal !== val) ctx.lineTo(x, midY-prevVal*amp);
+          }
+          if(i>0 && row===2){
+            const prevVal = s_arr[i-1];
+            if(prevVal !== val) ctx.lineTo(x, midY-prevVal*amp);
+          }
+          i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+        }
+        ctx.stroke();
+      } else if (row===3){
+        // Noisy r(t)
+        const r_amp = amp * 0.35;
+        for(let i=0; i<steps; i+=2){
+          const x=pad.l+i, y=midY-r_arr[i]*r_amp;
+          i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+        }
+        ctx.stroke();
+      } else if (row===4){
+        // 1. First draw the raw r(t)*c(t) in thin red to show spread noise
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(244, 63, 94, 0.4)'; // Red/Pink semi-transparent
+        ctx.lineWidth = 1;
+        const raw_amp = amp * 0.35;
+        for(let i=0; i<steps; i+=2){
+          const x=pad.l+i, y=midY-r_times_c[i]*raw_amp;
+          i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+        }
+        ctx.stroke();
+        
+        // 2. Then draw the recovered d_hat(t) LPF
+        ctx.beginPath();
+        ctx.strokeStyle = colors[row];
+        ctx.lineWidth=2.5; ctx.shadowColor=colors[row]; ctx.shadowBlur=8;
+        for(let i=0; i<steps; i++){
+          const x=pad.l+i, y=midY-d_hat[i]*amp;
+          i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+        }
+        ctx.stroke(); ctx.shadowBlur=0;
+      }
+    }
+    
+    t++;
+    rafMap[12] = requestAnimationFrame(draw);
+  }
+  
+  draw();
+}
+
 // ════════════════════════════════════════
-// S10 · PROCESSING GAIN BARS
+// S10-1 · TACTICAL HUD SIMULATOR
 // ════════════════════════════════════════
+let hudState = 0; // 0 = Clean, 1 = Jammed, 2 = DSSS
+let hudDSSSSweep = 0;
+let hudT = 0;
+
+function animHUD() {
+  const cv = document.getElementById('hudCanvas');
+  if(!cv) return;
+  const parent = cv.parentElement;
+  cv.width = parent.offsetWidth; cv.height = parent.offsetHeight;
+  const ctx = cv.getContext('2d');
+  
+  const btnJam = document.getElementById('btnJammer');
+  const btnDSSS = document.getElementById('btnDSSS');
+  const panel = document.getElementById('hudPanel');
+  const stTitle = document.getElementById('hudStatusTitle');
+  const stSig = document.getElementById('hudSignal');
+  const stNoise = document.getElementById('hudNoise');
+  const stData = document.getElementById('hudData');
+  const glitch = document.getElementById('hudGlitchOverlay');
+  
+  // Setup Points
+  if (!cv._pts) {
+    cv._pts = [];
+    for(let i=0; i<8; i++) {
+      cv._pts.push({
+        x: cv.width*0.2 + Math.random() * cv.width*0.6,
+        y: cv.height*0.2 + Math.random() * cv.height*0.6,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+  
+  if(!cv._initEv) {
+    cv._initEv = true;
+    
+    btnJam.onclick = () => {
+      hudState = 1;
+      panel.style.background = 'rgba(244, 63, 94, 0.1)';
+      panel.style.borderColor = '#f43f5e';
+      panel.style.color = '#f43f5e';
+      stTitle.style.borderBottomColor = '#f43f5e';
+      stTitle.innerText = 'ALERTA: JAMMER DETECTADO';
+      stSig.innerText = '0% (PERDIDO)'; stNoise.innerText = 'CRÍTICO'; stData.innerText = '---';
+      btnJam.style.opacity = '0.3'; btnJam.style.pointerEvents = 'none';
+      btnDSSS.style.opacity = '1'; btnDSSS.style.pointerEvents = 'all';
+      glitch.style.opacity = '1';
+    };
+    
+    btnDSSS.onclick = () => {
+      hudState = 2;
+      hudDSSSSweep = 0;
+      panel.style.background = 'rgba(0, 255, 200, 0.1)';
+      panel.style.borderColor = 'var(--green)';
+      panel.style.color = 'var(--green)';
+      stTitle.style.borderBottomColor = 'var(--green)';
+      stTitle.innerText = 'DSSS ACTIVADO (MAJ ACTIVO)';
+      stSig.innerText = '100% (Recuperado)'; stNoise.innerText = 'Ensanchado'; stData.innerText = 'Rx Confirmado';
+      btnDSSS.style.opacity = '0.3'; btnDSSS.style.pointerEvents = 'none';
+      glitch.style.opacity = '0';
+    };
+  }
+  
+  // Reset state EVERY TIME the slide is entered
+  hudState = 0; 
+  hudDSSSSweep = 0;
+  hudT = 0;
+  
+  // Reset UI
+  panel.style.background = 'rgba(0, 212, 255, 0.05)';
+  panel.style.borderColor = 'rgba(0, 212, 255, 0.3)';
+  panel.style.color = 'var(--cyan)';
+  stTitle.style.borderBottomColor = 'rgba(0, 212, 255, 0.3)';
+  stTitle.innerText = 'ESTADO DE ENLACE: ÓPTIMO';
+  stSig.innerText = '100%'; stNoise.innerText = 'Bajo'; stData.innerText = 'Recibiendo...';
+  btnJam.style.opacity = '1'; btnJam.style.pointerEvents = 'all';
+  btnDSSS.style.opacity = '0.3'; btnDSSS.style.pointerEvents = 'none';
+  glitch.style.opacity = '0';
+  
+  function draw() {
+    if(!document.getElementById('s10-intro').classList.contains('active')) return;
+    const W = cv.width, H = cv.height;
+    
+    // Screen Shake
+    ctx.save();
+    if(hudState === 1) {
+      ctx.translate((Math.random()-0.5)*12, (Math.random()-0.5)*12);
+    }
+    
+    ctx.clearRect(0,0,W,H);
+    
+    // Draw Radar Rings
+    const cx = W/2, cy = H/2;
+    const maxR = Math.min(W,H)*0.4;
+    ctx.strokeStyle = 'rgba(0, 212, 255, 0.15)';
+    ctx.lineWidth = 1;
+    for(let i=1; i<=4; i++) {
+      ctx.beginPath(); ctx.arc(cx, cy, maxR * (i/4), 0, Math.PI*2); ctx.stroke();
+    }
+    // Radar crosshair
+    ctx.beginPath(); ctx.moveTo(cx, cy-maxR); ctx.lineTo(cx, cy+maxR); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx-maxR, cy); ctx.lineTo(cx+maxR, cy); ctx.stroke();
+    
+    // Normal Sweep
+    const sweepA = (hudT * 0.03) % (Math.PI*2);
+    ctx.fillStyle = 'rgba(0,212,255,0.05)';
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,maxR, sweepA-0.5, sweepA); ctx.lineTo(cx,cy); ctx.fill();
+    ctx.strokeStyle = 'rgba(0,212,255,0.8)'; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx + Math.cos(sweepA)*maxR, cy + Math.sin(sweepA)*maxR); ctx.stroke();
+    
+    // Draw Noise
+    if(hudState === 1 || hudState === 2) {
+      const noiseOpacity = hudState === 1 ? 0.8 : 0.15;
+      ctx.fillStyle = `rgba(244, 63, 94, ${noiseOpacity})`;
+      const count = hudState === 1 ? 1200 : 300;
+      for(let i=0; i<count; i++) {
+        ctx.fillRect(Math.random()*W, Math.random()*H, Math.random()*5, Math.random()*2);
+      }
+    }
+    
+    // Draw Points
+    cv._pts.forEach(p => {
+      const dx = p.x - cx, dy = p.y - cy;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if (d > maxR) return;
+      
+      let alpha = 0;
+      if (hudState === 0) alpha = 0.5 + Math.sin(hudT*0.1 + p.phase)*0.5;
+      if (hudState === 1) alpha = 0; // Lost
+      if (hudState === 2) {
+        if (p.x < hudDSSSSweep) alpha = 0.8 + Math.sin(hudT*0.2 + p.phase)*0.2; // Recovered
+        else alpha = 0;
+      }
+      
+      if (alpha > 0) {
+        ctx.fillStyle = `rgba(0, 255, 200, ${alpha})`;
+        ctx.shadowColor = '#00ffc8'; ctx.shadowBlur = 12;
+        ctx.beginPath(); ctx.arc(p.x, p.y, 5, 0, Math.PI*2); ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    });
+    
+    // DSSS Sweep
+    if (hudState === 2) {
+      hudDSSSSweep += 15;
+      if (hudDSSSSweep < W) {
+        ctx.fillStyle = 'rgba(0, 212, 255, 0.2)';
+        ctx.fillRect(0, 0, hudDSSSSweep, H);
+        ctx.strokeStyle = '#00ffc8'; ctx.lineWidth = 4;
+        ctx.shadowColor = '#00ffc8'; ctx.shadowBlur = 15;
+        ctx.beginPath(); ctx.moveTo(hudDSSSSweep, 0); ctx.lineTo(hudDSSSSweep, H); ctx.stroke();
+        ctx.shadowBlur = 0;
+      } else {
+        ctx.fillStyle = 'rgba(0, 212, 255, 0.05)';
+        ctx.fillRect(0, 0, W, H);
+      }
+    }
+    
+    ctx.restore();
+    hudT++;
+    rafMap[14] = requestAnimationFrame(draw);
+  }
+  
+  draw();
+}
+
 // ════════════════════════════════════════
 // S10 · PROCESSING GAIN BARS
 // ════════════════════════════════════════
@@ -2290,6 +2608,7 @@ function animPG(){
   const parent=cv.parentElement;
   cv.width=parent.offsetWidth;cv.height=parent.offsetHeight;
   const ctx=cv.getContext('2d');
+  
   
   const systems=[
     {name:'IEEE 802.11b',gp:10.4,rc:'11 Mcps',rb:'1 Mbps',col:'#3d85ff'},
@@ -2453,7 +2772,7 @@ function animPG(){
     }
     
     t++;
-    rafMap[10] = requestAnimationFrame(draw);
+    rafMap[13] = requestAnimationFrame(draw);
   }
   
   draw();
@@ -2487,7 +2806,7 @@ function animPN(){
     if (cACF) drawACF(cACF, pnT);
     
     pnT++;
-    rafMap[11] = requestAnimationFrame(draw);
+    rafMap[9] = requestAnimationFrame(draw);
   }
   draw();
 }
@@ -2859,7 +3178,7 @@ function animRAKE(){
     }
     
     rakeT++;
-    rafMap[12] = requestAnimationFrame(draw);
+    rafMap[19] = requestAnimationFrame(draw);
   }
   
   draw();
@@ -2893,7 +3212,7 @@ function animAJ(){
   }
   
   const cvAJ = document.getElementById('ajCanvas');
-  const cvLPI = document.getElementById('lpiCanvas');
+  const cvLPI_ = document.getElementById('lpiCanvas');
   
   if (cvAJ) cvAJ._cleanup = () => { ajCorrelatorActive = false; };
   
@@ -2901,10 +3220,10 @@ function animAJ(){
     if(!document.getElementById('s13').classList.contains('active')) return;
     
     if (cvAJ) drawAJPanel(cvAJ, 'aj', ajT, ajCorrelatorActive, isAjFormulaHovered);
-    if (cvLPI) drawAJPanel(cvLPI, 'lpi', ajT, false, false);
+    if (cvLPI_) drawAJPanel(cvLPI_, 'lpi', ajT, false, false);
     
     ajT++;
-    rafMap[13] = requestAnimationFrame(draw);
+    rafMap[15] = requestAnimationFrame(draw);
   }
   draw();
 }
@@ -3081,6 +3400,8 @@ let cdmaMacroActive = false;
 let cdmaMacroUser = 0;
 
 function animCDMA(){
+  cdmaMacroActive = false;
+  cdmaT = 0;
   const form = document.getElementById('formulaCDMA');
   if (form && !form._bound) {
     form.addEventListener('click', () => {
@@ -3098,7 +3419,7 @@ function animCDMA(){
     if(!document.getElementById('s14').classList.contains('active')) return;
     drawCDMAPanel(cv, cdmaT, cdmaMacroActive, cdmaMacroUser);
     cdmaT++;
-    rafMap[14] = requestAnimationFrame(draw);
+    rafMap[16] = requestAnimationFrame(draw);
   }
   draw();
 }
@@ -3290,7 +3611,7 @@ function animBluetooth(){
     if (cvMap) drawAFHMap(cvMap, afhT, isAfhHovered, counter);
     
     afhT++;
-    rafMap[15] = requestAnimationFrame(draw);
+    rafMap[17] = requestAnimationFrame(draw);
   }
   draw();
 }
@@ -3514,7 +3835,7 @@ function animApps(){
     drawGPS(appsT);
     drawWifi(appsT, wifiMouse);
     appsT++;
-    rafMap[16] = requestAnimationFrame(draw);
+    rafMap[18] = requestAnimationFrame(draw);
   }
   draw();
 }
@@ -3768,7 +4089,7 @@ function animConclusion(){
     
     drawTimeline(concT);
     concT++;
-    rafMap[17]=requestAnimationFrame(draw);
+    rafMap[19]=requestAnimationFrame(draw);
   }
   draw();
 }
@@ -3839,11 +4160,161 @@ function drawTimeline(t){
        ctx.fillText(l, x, midY+lh*fade+(above?-(20+k*9):(22+k*9)));
     });
     
-    // Pulse effect when the line just passes it
-    if (age > 0 && age < 30) {
+     if (age > 0 && age < 30) {
        ctx.beginPath();ctx.arc(x,midY,4 + age*1.5,0,Math.PI*2);
        ctx.strokeStyle=`rgba(${hexToRgb(ev.col)},${1 - age/30})`;
        ctx.lineWidth=2;ctx.stroke();
-    }
+     }
   });
+}
+
+// ════════════════════════════════════════
+// S11-1 · BARKER SYNC SIMULATOR
+// ════════════════════════════════════════
+function animBarker() {
+  const cv = document.getElementById('barkerCanvas');
+  if(!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width = cv.parentElement.offsetWidth;
+  const H = cv.height = cv.parentElement.offsetHeight;
+  
+  const barker = [1, -1, 1, 1, -1, 1, 1, 1, -1, -1, -1];
+  let bkT = 0;
+  
+  const st = document.getElementById('bkStatus');
+  const eBar = document.getElementById('bkEnergyBar');
+  const tauLbl = document.getElementById('bkTau');
+  
+  const chips = 11;
+  const chipW = W * 0.05;
+  const startX = W * 0.225;
+  
+  function draw() {
+    if(!document.getElementById('s11-barker').classList.contains('active')) return;
+    ctx.clearRect(0, 0, W, H);
+    
+    const cycle = 350;
+    const progress = (bkT % cycle) / cycle; 
+    const slideOffset = (progress - 0.5) * (chipW * chips * 2);
+    const currentShift = Math.round(slideOffset / chipW);
+    
+    let corr = 0;
+    for(let i=0; i<chips; i++) {
+       const j = i - currentShift;
+       if (j >= 0 && j < chips) {
+          corr += barker[i] * barker[j];
+       }
+    }
+    
+    const isMatch = (currentShift === 0);
+    
+    if (st && eBar && tauLbl) {
+      if (isMatch) {
+         st.innerText = "ENGANCHADO (MATCH)";
+         st.style.color = "#00c896";
+         st.style.textShadow = "0 0 15px #00c896";
+         eBar.style.width = "100%";
+         eBar.style.background = "#00c896";
+         eBar.style.boxShadow = "0 0 15px #00c896";
+         tauLbl.innerText = "τ = 0 (ALINEADO)";
+         tauLbl.style.color = "#00c896";
+      } else {
+         st.innerText = "BUSCANDO...";
+         st.style.color = "#f59e0b";
+         st.style.textShadow = "0 0 10px #f59e0b";
+         eBar.style.width = Math.max(5, (Math.abs(corr)/11)*100) + "%";
+         eBar.style.background = "#f59e0b";
+         eBar.style.boxShadow = "0 0 10px #f59e0b";
+         tauLbl.innerText = "τ = " + (currentShift > 0 ? '+' : '') + currentShift + " Tc";
+         tauLbl.style.color = "var(--cyan)";
+      }
+    }
+    
+    const yRx = H * 0.25;
+    const amp = H * 0.08;
+    
+    ctx.strokeStyle = '#00d4ff';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    for(let i=0; i<chips; i++) {
+       const b = barker[i];
+       const x = startX + i*chipW;
+       ctx.lineTo(x, yRx - b*amp);
+       ctx.lineTo(x + chipW, yRx - b*amp);
+    }
+    ctx.stroke();
+    
+    ctx.fillStyle = 'rgba(0, 212, 255, 0.5)';
+    ctx.font = '12px var(--mono)';
+    ctx.fillText("SEÑAL RX (CON RUIDO)", startX, yRx - amp - 20);
+    
+    const yRef = H * 0.55;
+    const refX = startX + slideOffset;
+    
+    ctx.strokeStyle = isMatch ? '#00c896' : '#f59e0b';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    for(let i=0; i<chips; i++) {
+       const b = barker[i];
+       const x = refX + i*chipW;
+       ctx.lineTo(x, yRef - b*amp);
+       ctx.lineTo(x + chipW, yRef - b*amp);
+    }
+    ctx.stroke();
+    
+    ctx.fillStyle = isMatch ? 'rgba(0, 200, 150, 0.5)' : 'rgba(245, 158, 11, 0.5)';
+    ctx.fillText("RÉPLICA LOCAL", refX, yRef - amp - 20);
+    
+    const yCorr = H * 0.85;
+    const corrAmp = H * 0.1; 
+    const baseLine = yCorr + corrAmp*0.8;
+    
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(startX - chipW*chips, baseLine);
+    for(let shift = -chips; shift <= chips; shift++) {
+       let c = 0;
+       for(let i=0; i<chips; i++) {
+          const j = i - shift;
+          if(j>=0 && j<chips) c += barker[i]*barker[j];
+       }
+       const x = startX + shift*chipW + (chipW*chips)/2;
+       const y = baseLine - (c/11)*corrAmp*1.5;
+       ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    
+    const activeX = startX + currentShift*chipW + (chipW*chips)/2;
+    const activeY = baseLine - (corr/11)*corrAmp*1.5;
+    
+    ctx.fillStyle = isMatch ? '#00c896' : '#f59e0b';
+    ctx.beginPath();
+    ctx.arc(activeX, activeY, isMatch ? 8 : 5, 0, Math.PI*2);
+    ctx.fill();
+    ctx.shadowColor = isMatch ? '#00c896' : '#f59e0b';
+    ctx.shadowBlur = 15;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    
+    if(isMatch) {
+       ctx.strokeStyle = 'rgba(0, 200, 150, 0.3)';
+       ctx.lineWidth = 1;
+       ctx.setLineDash([5,5]);
+       ctx.beginPath();
+       ctx.moveTo(startX, yRx);
+       ctx.lineTo(startX, baseLine);
+       ctx.moveTo(startX + chipW*chips, yRx);
+       ctx.lineTo(startX + chipW*chips, baseLine);
+       ctx.stroke();
+       ctx.setLineDash([]);
+       
+       ctx.fillStyle = "rgba(0, 200, 150, " + Math.max(0, 0.3 - (bkT%cycle)*0.01) + ")";
+       ctx.fillRect(startX, yRx - amp - 10, chipW*chips, yRef - yRx + amp*2);
+    }
+
+    bkT++;
+    rafMap[10] = requestAnimationFrame(draw);
+  }
+  draw();
 }

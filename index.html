@@ -213,7 +213,7 @@
       <div class="chart-lbl">Árbol taxonómico · Familia de técnicas SS</div>
       <canvas id="taxoCanvas" class="flex-canvas"></canvas>
       <div id="taxoTooltip" class="taxo-tooltip glass-pill">
-        <div class="tt-title" id="ttTitle">Modulación</div>
+        <div class="tt-title" id="ttTitle"></div>
         <canvas id="ttCanvas" class="tt-canvas" width="120" height="40"></canvas>
       </div>
     </div>
@@ -318,67 +318,12 @@
   </div>
 </article>
 
-<!-- S9 DSSS -->
-<article class="slide" id="s9" data-chapter="DSSS Spreading"
- data-notes="DSSS multiplica cada bit de datos d(t) por una secuencia PN de chips de mayor velocidad c(t). La señal ensanchada s(t) = d(t)·c(t) tiene ancho de banda Bss ≈ 2Rc. En el receptor: r(t)·c(t) = d(t)·c²(t) + n(t)·c(t). Como c²(t)=1 para secuencias BPSK, se recupera d(t). El término de ruido queda ensanchado y se atenúa en Gp dB tras el filtrado. En 802.11b: Barker-11, Rc=11Mcps, Rb=1Mbps → Gp=10.4dB. La operación de desensanchamiento convierte interferencia de banda estrecha en señal de banda ancha atenuada.">
-  <div class="slide-full dsss-layout">
-    <div class="dsss-sidebar">
-      <div class="stag">09</div>
-      <h2 class="stitle-sm">DSSS · Ensanchamiento</h2>
-      <div class="eq-block">
-        <div class="eq-row"><span class="eq-s">d(t)</span><span class="eq-t">Datos · baja tasa R<sub>b</sub></span></div>
-        <div class="eq-op">× XOR</div>
-        <div class="eq-row"><span class="eq-s">c(t)</span><span class="eq-t">Código PN chips · alta tasa R<sub>c</sub></span></div>
-        <div class="eq-op">=</div>
-        <div class="eq-row eq-out"><span class="eq-s">s(t)</span><span class="eq-t">Señal DSSS · B<sub>ss</sub> ≈ 2R<sub>c</sub></span></div>
-      </div>
-      <div class="spec-list compact">
-        <div class="sl-row"><div class="sl-k">Desensanchamiento</div><div class="sl-v">r(t)·c(t) → d̂(t)</div></div>
-        <div class="sl-row"><div class="sl-k">Interferencia</div><div class="sl-v">Ensanchada → −G<sub>p</sub> dB</div></div>
-        <div class="sl-row sl-hi"><div class="sl-k">802.11b</div><div class="sl-v">Barker-11 · 11 Mcps</div></div>
-      </div>
-      <div class="src">Wray Castle · VOCAL 802.11b · Globalspec §5.9</div>
-    </div>
-    <div class="dsss-main"><canvas id="dsssCanvas" class="fill-canvas"></canvas></div>
-  </div>
-</article>
-
-<!-- S10 PROCESSING GAIN -->
-<article class="slide" id="s10" data-chapter="Processing Gain"
- data-notes="La Ganancia de Procesamiento Gp = Bss/Binfo = Rc/Rb = Tb/Tc es el parámetro más importante del sistema DSSS. En dB: Gp = 10·log₁₀(Rc/Rb). El Margen Anti-Jam: MAJ = Gp − (Eb/N0)req. Para IEEE 802.11b: 11Mcps/1Mbps = 11 → 10.4dB. Para GPS C/A: 1.023Mcps/50bps = 20,460 → 43.1dB. La FCC (CFR 47, Part 15) exige Gp ≥ 10dB para dispositivos SS en bandas ISM. Con Gp=30dB y (Eb/N0)req=9.6dB: MAJ≈20.4dB, el sistema tolera un jammer 110 veces más potente que la señal útil.">
-  <div class="slide-split-lr">
-    <div class="split-left">
-      <div class="stag">10</div>
-      <h2 class="stitle">Ganancia de Procesamiento</h2>
-      <p class="ssub">Processing Gain · Parámetro clave DSSS</p>
-      <div class="formula-hero">
-        <div class="fh-lbl">Fórmulas Fundamentales</div>
-        <div class="fh-eq sm">G<sub>p</sub> = B<sub>ss</sub> / B<sub>info</sub> = R<sub>c</sub> / R<sub>b</sub> = T<sub>b</sub> / T<sub>c</sub></div>
-        <div class="fh-eq sm" id="pgFormulaHover" style="margin-top:6px; cursor:pointer;">G<sub>p</sub> [dB] = 10·log₁₀(R<sub>c</sub> / R<sub>b</sub>)</div>
-        <div class="fh-eq sm amber-eq" style="margin-top:6px">M<sub>AJ</sub> = G<sub>p</sub> − (E<sub>b</sub>/N₀)<sub>req</sub></div>
-      </div>
-      <div class="pg-examples">
-        <div class="pge-title">Sistemas reales</div>
-        <div class="pge-row"><div class="pge-s">IEEE 802.11b</div><div class="pge-c pg-anim-var">11 Mcps / 1 Mbps</div><div class="pge-r pg-anim-res"><strong>10.4 dB</strong></div></div>
-        <div class="pge-row"><div class="pge-s">CDMA IS-95</div><div class="pge-c pg-anim-var">1.23 Mcps / 9.6 kbps</div><div class="pge-r pg-anim-res"><strong>21.1 dB</strong></div></div>
-        <div class="pge-row"><div class="pge-s">W-CDMA 3G</div><div class="pge-c pg-anim-var">3.84 Mcps / 7.5 kbps</div><div class="pge-r pg-anim-res"><strong>27.1 dB</strong></div></div>
-        <div class="pge-row"><div class="pge-s">GPS C/A Code</div><div class="pge-c pg-anim-var">1.023 Mcps / 50 bps</div><div class="pge-r pg-anim-res"><strong>43.1 dB</strong></div></div>
-      </div>
-      <div class="src">Wikipedia Process Gain · FCC CFR47 pe6awl1100c · WU ECE UFL CDMA</div>
-    </div>
-    <div class="split-right col-flex">
-      <div class="chart-lbl">Ganancia de Procesamiento comparativa · G<sub>p</sub> [dB]</div>
-      <canvas id="pgCanvas" class="flex-canvas"></canvas>
-    </div>
-  </div>
-</article>
-
 <!-- S11 PN SEQUENCES -->
 <article class="slide" id="s11" data-chapter="Secuencias PN"
  data-notes="Las secuencias PN son el fundamento matemático del SS. Propiedades clave: 1) ACF con pico en τ=0 igual a N (longitud), y ≈−1 fuera del pico → sincronización perfecta. 2) CCF muy baja entre códigos distintos → acceso múltiple CDMA. M-sequences generadas por LFSR de longitud n producen secuencias de período 2^n−1. Barker-11 (802.11b) tiene ACF ideal: pico=11, fuera del pico ≤1. Gold Codes (GPS, CDMA) se generan sumando módulo-2 dos M-sequences preferidas, produciendo 2^n+1 secuencias con CCF controlada. GPS usa Gold Codes de longitud 1023 con chip rate 1.023 Mcps — cada satélite tiene un código único (número PRN).">
   <div class="slide-full pn-layout">
     <div class="pn-header">
-      <div class="stag">11</div>
+      <div class="stag">09</div>
       <div><h2 class="stitle">Secuencias PN · Códigos de Ensanchamiento</h2><p class="ssub">LFSR · Barker · Gold Codes · Autocorrelación</p></div>
     </div>
     <div class="pn-body">
@@ -407,29 +352,152 @@
   </div>
 </article>
 
-<!-- S12 RAKE -->
-<article class="slide" id="s12" data-chapter="Receptor RAKE"
- data-notes="El Receptor RAKE (Price & Green, 1958) resuelve el problema del fading multitrayecto en DSSS. En un canal radio, la señal llega por múltiples trayectos con retardos τ₁...τL y amplitudes a₁...aL. En DSSS, la resolución temporal 1/Rc permite separar llegadas con diferencia de retardo > 1/Rc. En IS-95 (Rc=1.2288Mcps): resolución=813ns=244m. El RAKE usa N fingers (correladores paralelos), cada uno sintonizado al retardo τₖ de una llegada. El MRC Combiner suma las salidas con pesos aₖ* proporcionales a la amplitud estimada: y=Σ aₖ*·xₖ. UMTS W-CDMA usa 3-6 fingers. El multitrayecto — enemigo en banda estrecha — se convierte en aliado en DSSS.">
+
+<!-- S11-1 BARKER SYNC -->
+<article class="slide" id="s11-barker" data-chapter="Sincronización Barker"
+ data-notes="La Sincronización Dinámica con código Barker-11 es crucial en DSSS y 802.11b. El receptor no sabe cuándo empieza la transmisión, así que toma la señal recibida y la correlaciona continuamente con una copia local del código Barker-11 (+1,-1,+1,+1,-1,+1,+1,+1,-1,-1,-1). A medida que la copia local se desliza en el tiempo (τ), el nivel de correlación es bajo (≈ -1) debido a la propiedad pseudoaleatoria del código. Pero cuando se alinean perfectamente (τ=0), ocurre el 'Match' y la correlación salta a 11 (Auto-Correlación ideal). Este pico masivo permite al receptor 'engancharse' a la señal incluso bajo ruido extremo o multitrayecto (ecos).">
   <div class="slide-split-lr">
     <div class="split-left">
-      <div class="stag">12</div>
-      <h2 class="stitle">Receptor RAKE</h2>
-      <p class="ssub">Diversidad Multitrayecto · MRC Combining</p>
+      <div class="stag">09-1</div>
+      <h2 class="stitle">Sincronización Dinámica · Barker-11</h2>
+      <p class="ssub">Correlación Continua · Detección de Pico (Match)</p>
+      
+      <div class="hud-panel" style="margin-top:20px; background:rgba(10,15,25,0.7); padding:20px; border-radius:12px; border:1px solid rgba(0,212,255,0.2);">
+         <div class="hud-var" style="font-size:0.75rem; color:var(--cyan);">ESTADO DEL CORRELADOR</div>
+         <div id="bkStatus" style="font-family:var(--mono); color:#f59e0b; font-size:1.5rem; text-shadow:0 0 10px #f59e0b; margin-top:5px; transition:color 0.1s;">BUSCANDO...</div>
+         
+         <div class="hud-var" style="margin-top:20px; font-size:0.75rem; color:var(--cyan);">NIVEL DE ENERGÍA (R)</div>
+         <div style="width:100%; height:8px; background:rgba(255,255,255,0.1); border-radius:4px; margin-top:5px; position:relative; overflow:hidden;">
+            <div id="bkEnergyBar" style="position:absolute; left:0; top:0; bottom:0; width:10%; background:#f59e0b; box-shadow:0 0 10px #f59e0b; transition:width 0.1s linear, background 0.1s;"></div>
+         </div>
+      </div>
+      
+      <div class="prop-list" style="margin-top:30px;">
+        <div class="prop-row"><div class="prop-dot orange-dot2" style="background:#f59e0b;box-shadow:0 0 8px #f59e0b;width:12px;height:12px;border-radius:50%;margin-top:4px;"></div><div><strong>Búsqueda en Tiempo Real</strong><p style="color:var(--t2);font-size:0.9rem;">Deslizamiento continuo de la réplica local (τ)</p></div></div>
+        <div class="prop-row"><div class="prop-dot cyan-dot2" style="background:#00d4ff;box-shadow:0 0 8px #00d4ff;width:12px;height:12px;border-radius:50%;margin-top:4px;"></div><div><strong>Pico de Auto-Correlación</strong><p style="color:var(--t2);font-size:0.9rem;">El "Match" produce un salto de energía de 11x</p></div></div>
+        <div class="prop-row"><div class="prop-dot violet-dot2" style="background:#7c3aed;box-shadow:0 0 8px #7c3aed;width:12px;height:12px;border-radius:50%;margin-top:4px;"></div><div><strong>Resiliencia a Ecos</strong><p style="color:var(--t2);font-size:0.9rem;">Picos secundarios ≤ 1 rechazan el multitrayecto</p></div></div>
+      </div>
+    </div>
+    
+    <div class="split-right col-flex" style="position:relative; overflow:hidden; background:var(--bg2);">
+       <div class="chart-lbl" style="position:absolute; top:20px; left:20px; z-index:10; color:var(--cyan); text-shadow:0 0 5px var(--cyan);">RADAR DE CORRELACIÓN // ENLACE: <span id="bkTau">τ = --</span></div>
+       <canvas id="barkerCanvas" class="flex-canvas"></canvas>
+    </div>
+  </div>
+</article>
+
+<!-- S9 DSSS -->
+<article class="slide" id="s9" data-chapter="DSSS Spreading"
+ data-notes="DSSS multiplica cada bit de datos d(t) por una secuencia PN de chips de mayor velocidad c(t). La señal ensanchada s(t) = d(t)·c(t) tiene ancho de banda Bss ≈ 2Rc. En el receptor: r(t)·c(t) = d(t)·c²(t) + n(t)·c(t). Como c²(t)=1 para secuencias BPSK, se recupera d(t). El término de ruido queda ensanchado y se atenúa en Gp dB tras el filtrado. En 802.11b: Barker-11, Rc=11Mcps, Rb=1Mbps → Gp=10.4dB. La operación de desensanchamiento convierte interferencia de banda estrecha en señal de banda ancha atenuada.">
+  <div class="slide-full dsss-layout">
+    <div class="dsss-sidebar">
+      <div class="stag">10</div>
+      <h2 class="stitle-sm">DSSS · Ensanchamiento</h2>
+      <div class="eq-block">
+        <div class="eq-row"><span class="eq-s">d(t)</span><span class="eq-t">Datos · baja tasa R<sub>b</sub></span></div>
+        <div class="eq-op">× XOR</div>
+        <div class="eq-row"><span class="eq-s">c(t)</span><span class="eq-t">Código PN chips · alta tasa R<sub>c</sub></span></div>
+        <div class="eq-op">=</div>
+        <div class="eq-row eq-out"><span class="eq-s">s(t)</span><span class="eq-t">Señal DSSS · B<sub>ss</sub> ≈ 2R<sub>c</sub></span></div>
+      </div>
       <div class="spec-list compact">
-        <div class="sl-row"><div class="sl-k">Resolución temporal</div><div class="sl-v">Δτ<sub>min</sub> = 1/R<sub>c</sub></div></div>
-        <div class="sl-row"><div class="sl-k">IS-95 (1.23 Mcps)</div><div class="sl-v">813 ns ≡ 244 m</div></div>
-        <div class="sl-row"><div class="sl-k">MRC Combiner</div><div class="sl-v">y = Σ aₖ* · xₖ</div></div>
-        <div class="sl-row sl-hi"><div class="sl-k">UMTS W-CDMA</div><div class="sl-v">3—6 fingers activos</div></div>
+        <div class="sl-row"><div class="sl-k">Desensanchamiento</div><div class="sl-v">r(t)·c(t) → d̂(t)</div></div>
+        <div class="sl-row"><div class="sl-k">Interferencia</div><div class="sl-v">Ensanchada → −G<sub>p</sub> dB</div></div>
+        <div class="sl-row sl-hi"><div class="sl-k">802.11b</div><div class="sl-v">Barker-11 · 11 Mcps</div></div>
       </div>
-      <div class="insight-card green-card">
-        <div class="ic-title">Diversidad Multitrayecto</div>
-        <div class="ic-text">En DSSS, cada llegada multitrayecto es una copia independiente de la señal. El RAKE las combina constructivamente, convirtiendo el fading en ganancia de diversidad.</div>
+      <div class="src">Wray Castle · VOCAL 802.11b · Globalspec §5.9</div>
+    </div>
+    <div class="dsss-main"><canvas id="dsssCanvas" class="fill-canvas"></canvas></div>
+  </div>
+</article>
+
+<!-- S9-1 DSSS SIMULATOR -->
+<article class="slide" id="s9-1" data-chapter="Simulador DSSS"
+ data-notes="Simulador interactivo del receptor DSSS. Demuestra la resiliencia al ruido y la interferencia variando los sliders.">
+  <div class="slide-full dsss-layout">
+    <div class="dsss-sidebar">
+      <div class="stag">10-1</div>
+      <h2 class="stitle-sm">Simulador DSSS</h2>
+      <div class="eq-block" style="padding: 12px;">
+        <div class="eq-row"><span class="eq-s" style="background:rgba(244,63,94,0.15); color:#f43f5e;">r(t)</span><span class="eq-t">Rx (Señal + Ruido + Jammer)</span></div>
+        <div class="eq-op" style="color:var(--t2);">↓ Correlador LPF</div>
+        <div class="eq-row eq-out"><span class="eq-s">d̂(t)</span><span class="eq-t">Datos Recuperados</span></div>
       </div>
-      <div class="src">wirelesscommunication.nl · Wikipedia RAKE · DiVA Portal UWB · SE RAKE Path Searcher</div>
+      
+      <div class="sim-controls" style="margin-top: 10px; background:var(--bg4); border:1px solid var(--brd); border-radius:12px; padding:16px 18px; display:flex; flex-direction:column; gap:16px;">
+         <h3 style="font-family:var(--mono); font-size:11px; color:var(--cyan); margin:0; text-transform:uppercase; letter-spacing:1px;">Control de Ruido / Jamming</h3>
+         <div style="display:flex; flex-direction:column; gap:6px;">
+            <label for="noiseSlider" style="font-family:var(--mono); font-size:11px; color:var(--t3); display:flex; justify-content:space-between;">
+               <span>Amplitud de Ruido n(t)</span><span id="noiseVal" style="color:#f43f5e; font-weight:bold;">100%</span>
+            </label>
+            <input type="range" id="noiseSlider" min="0" max="3" step="0.01" value="1.0" style="accent-color: #f43f5e; width:100%; cursor:pointer;">
+         </div>
+         <div style="font-family:var(--mono); font-size:10px; color:var(--t3); line-height:1.6; margin-top:4px;">
+            <div style="color:var(--cyan)">r(t)·c(t) = [s(t) + n(t)]·c(t)</div>
+            <div>r(t)·c(t) = d(t)·c²(t) + n(t)·c(t)</div>
+            <div style="color:var(--amber); margin-top:4px;">Como modulación polar c²(t) = 1:</div>
+            <div style="color:var(--green); font-weight:bold; font-size:11px; margin-top:2px;">Recuperada = d(t) + n(t)·c(t)</div>
+         </div>
+      </div>
+    </div>
+    <div class="dsss-main"><canvas id="dsssSimCanvas" class="fill-canvas"></canvas></div>
+  </div>
+</article>
+
+<!-- S10 PROCESSING GAIN -->
+<article class="slide" id="s10" data-chapter="Processing Gain"
+ data-notes="La Ganancia de Procesamiento Gp = Bss/Binfo = Rc/Rb = Tb/Tc es el parámetro más importante del sistema DSSS. En dB: Gp = 10·log₁₀(Rc/Rb). El Margen Anti-Jam: MAJ = Gp − (Eb/N0)req. Para IEEE 802.11b: 11Mcps/1Mbps = 11 → 10.4dB. Para GPS C/A: 1.023Mcps/50bps = 20,460 → 43.1dB. La FCC (CFR 47, Part 15) exige Gp ≥ 10dB para dispositivos SS en bandas ISM. Con Gp=30dB y (Eb/N0)req=9.6dB: MAJ≈20.4dB, el sistema tolera un jammer 110 veces más potente que la señal útil.">
+  <div class="slide-split-lr">
+    <div class="split-left">
+      <div class="stag">11</div>
+      <h2 class="stitle">Ganancia de Procesamiento</h2>
+      <p class="ssub">Processing Gain · Parámetro clave DSSS</p>
+      <div class="formula-hero">
+        <div class="fh-lbl">Fórmulas Fundamentales</div>
+        <div class="fh-eq sm">G<sub>p</sub> = B<sub>ss</sub> / B<sub>info</sub> = R<sub>c</sub> / R<sub>b</sub> = T<sub>b</sub> / T<sub>c</sub></div>
+        <div class="fh-eq sm" id="pgFormulaHover" style="margin-top:6px; cursor:pointer;">G<sub>p</sub> [dB] = 10·log₁₀(R<sub>c</sub> / R<sub>b</sub>)</div>
+        <div class="fh-eq sm amber-eq" style="margin-top:6px">M<sub>AJ</sub> = G<sub>p</sub> − (E<sub>b</sub>/N₀)<sub>req</sub></div>
+      </div>
+      <div class="pg-examples">
+        <div class="pge-title">Sistemas reales</div>
+        <div class="pge-row"><div class="pge-s">IEEE 802.11b</div><div class="pge-c pg-anim-var">11 Mcps / 1 Mbps</div><div class="pge-r pg-anim-res"><strong>10.4 dB</strong></div></div>
+        <div class="pge-row"><div class="pge-s">CDMA IS-95</div><div class="pge-c pg-anim-var">1.23 Mcps / 9.6 kbps</div><div class="pge-r pg-anim-res"><strong>21.1 dB</strong></div></div>
+        <div class="pge-row"><div class="pge-s">W-CDMA 3G</div><div class="pge-c pg-anim-var">3.84 Mcps / 7.5 kbps</div><div class="pge-r pg-anim-res"><strong>27.1 dB</strong></div></div>
+        <div class="pge-row"><div class="pge-s">GPS C/A Code</div><div class="pge-c pg-anim-var">1.023 Mcps / 50 bps</div><div class="pge-r pg-anim-res"><strong>43.1 dB</strong></div></div>
+      </div>
+      <div class="src">Wikipedia Process Gain · FCC CFR47 pe6awl1100c · WU ECE UFL CDMA</div>
     </div>
     <div class="split-right col-flex">
-      <div class="chart-lbl">Arquitectura RAKE · N fingers + MRC Combiner</div>
-      <canvas id="rakeCanvas" class="flex-canvas"></canvas>
+      <div class="chart-lbl">Ganancia de Procesamiento comparativa · G<sub>p</sub> [dB]</div>
+      <canvas id="pgCanvas" class="flex-canvas"></canvas>
+    </div>
+  </div>
+</article>
+
+<!-- S10-INTRO HUD SIMULATOR -->
+<article class="slide" id="s10-intro" data-chapter="Margen Anti-Jam"
+ data-notes="Intro táctica al concepto de Margen Anti-Jamming. Pulsa los botones para simular un ataque y la defensa DSSS.">
+  <div class="slide-full" style="display:flex; flex-direction:row; padding:0; gap:0;">
+    <div style="width:300px; flex-shrink:0; padding:32px 24px; border-right:1px solid var(--brd); display:flex; flex-direction:column; gap:20px; background:var(--bg2);">
+      <div class="stag">11-1</div>
+      <h2 class="stitle-sm">Guerra Electrónica</h2>
+      <p class="ssub" style="margin-bottom:0;">Simulador HUD Táctico</p>
+      
+      <div id="hudPanel" style="background:rgba(0, 212, 255, 0.05); border:1px solid rgba(0, 212, 255, 0.3); border-radius:8px; padding:16px; font-family:var(--mono); font-size:12px; color:var(--cyan); transition:all 0.3s;">
+         <div style="font-weight:bold; margin-bottom:8px; border-bottom:1px solid rgba(0, 212, 255, 0.3); padding-bottom:4px;" id="hudStatusTitle">ESTADO DE ENLACE: ÓPTIMO</div>
+         <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Señal:</span> <strong id="hudSignal">100%</strong></div>
+         <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Ruido (N0):</span> <strong id="hudNoise">Bajo</strong></div>
+         <div style="display:flex; justify-content:space-between;"><span>Datos:</span> <strong id="hudData">Recibiendo...</strong></div>
+      </div>
+      
+      <div style="display:flex; flex-direction:column; gap:12px; margin-top:auto;">
+         <button id="btnJammer" style="background:rgba(244, 63, 94, 0.1); border:1px solid #f43f5e; color:#f43f5e; padding:12px; border-radius:6px; font-family:var(--mono); font-weight:bold; cursor:pointer; text-transform:uppercase; transition:all 0.2s;">⚠️ Disparar Jammer</button>
+         <button id="btnDSSS" style="background:rgba(0, 212, 255, 0.1); border:1px solid var(--cyan); color:var(--cyan); padding:12px; border-radius:6px; font-family:var(--mono); font-weight:bold; cursor:pointer; text-transform:uppercase; transition:all 0.2s; opacity:0.3; pointer-events:none;">🛡️ Activar DSSS</button>
+      </div>
+    </div>
+    <div id="hudContainer" style="flex:1; position:relative; background:#050a0f; overflow:hidden;">
+       <canvas id="hudCanvas" class="fill-canvas"></canvas>
+       <div id="hudGlitchOverlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background:repeating-linear-gradient(transparent, transparent 2px, rgba(244,63,94,0.15) 3px); pointer-events:none; opacity:0; transition:opacity 0.2s;"></div>
     </div>
   </div>
 </article>
@@ -439,7 +507,7 @@
  data-notes="Anti-Jamming en DSSS: un jammer de banda estrecha que ataca en f concentra energía en B_jammer≈B_info. Tras el desensanchamiento, la interferencia queda ensanchada al ancho de banda B_ss y se atenúa en Gp dB. Para ser efectivo, el jammer necesitaría conocer el código PN y sincronizarse — lo que lo convierte en un receptor completo. Según el documento NPTL IIT del Prof. Kutty Shajahan, el caso óptimo del jammer gaussiano sobre toda la banda produce una resistencia exactamente igual a Gp dB. LPI/LPD: la PSD de la señal SS = Ptx/Bss puede quedar por debajo del ruido térmico N₀=kTB≈−174dBm/Hz. Un radiómetro necesita integrar durante tiempo de observación largo para detectarla — tiempo que en sistemas militares excede los límites operacionales.">
   <div class="slide-full aj-layout">
     <div class="aj-header">
-      <div class="stag">13</div>
+      <div class="stag">12</div>
       <div><h2 class="stitle">Anti-Jamming y LPI/LPD</h2><p class="ssub">Resistencia al Jamming · Baja Probabilidad de Intercepción/Detección</p></div>
     </div>
     <div class="aj-panels">
@@ -479,7 +547,7 @@
  data-notes="CDMA permite que múltiples usuarios transmitan simultáneamente en la misma banda, diferenciados por códigos ortogonales. Condición de ortogonalidad: (1/T)∫₀ᵀ cₙ(t)·cₘ(t)dt = δₙₘ. IS-95 usa 64 códigos Walsh ortogonales en DL y Gold Codes en UL. W-CDMA usa factores de spreading 4–512 y chip rate 3.84 Mcps. La capacidad del sistema está limitada por interferencia, no por ancho de banda — reducir la interferencia mutua directamente incrementa la capacidad. La fuente WU ECE UFL CDMA detalla la selección de códigos y su impacto en la capacidad del sistema.">
   <div class="slide-split-lr">
     <div class="split-left">
-      <div class="stag">14</div>
+      <div class="stag">13</div>
       <h2 class="stitle">CDMA · Acceso Múltiple por Código</h2>
       <p class="ssub">Code Division Multiple Access · Ortogonalidad de códigos</p>
       <div class="cdma-formula" id="formulaCDMA" style="cursor:pointer; position:relative;" title="Haz clic para demostrar la recuperación ortogonal">
@@ -512,7 +580,7 @@
  data-notes="Bluetooth Classic usa FHSS con 79 canales de 1 MHz, 1600 saltos/segundo. El AFH (Adaptive Frequency Hopping), introducido en BT 1.2, monitorea la calidad de cada canal (PER, RSSI) y excluye los canales con interferencia Wi-Fi. El mínimo requerido es 20 canales buenos — si hay menos, AFH se desactiva. El handshake AFH requiere que maestro y esclavo intercambien el Channel Map para mantenerse sincronizados. BT 5.x extiende estos principios al BLE con 40 canales de 2MHz. La fuente Silicon Labs documenta el algoritmo de clasificación de canales y la secuencia de señalización AFH en detalle.">
   <div class="slide-split-lr">
     <div class="split-left col-flex">
-      <div class="stag">15</div>
+      <div class="stag">14</div>
       <h2 class="stitle">Bluetooth · AFH</h2>
       <p class="ssub">Adaptive Frequency Hopping · Coexistencia 2.4 GHz</p>
       <div class="chart-lbl">Timeline de saltos · Canal vs. Tiempo</div>
@@ -540,7 +608,7 @@
  data-notes="GPS: cada uno de los 31 satélites transmite en L1 (1575.42 MHz) y L2 (1227.60 MHz) usando DSSS con Gold Codes únicos. El código C/A tiene 1023 chips a 1.023 Mcps (período=1ms). El receptor correlaciona la señal con réplicas locales, mide el pseudo-retardo con resolución de nanosegundos. Con 4+ satélites: trilateración 3D con precisión civil < 3m. El código P(Y) militar usa 10.23 Mcps con período de 7 días → precisión < 0.3m. IEEE 802.11b (1999): DSSS en ISM 2.4GHz con Barker-11+DQPSK para 1/2Mbps, CCK (vectores de 8 chips complejos) para 5.5/11Mbps. CCK reemplaza Barker-11 transmitiendo 4 bits/símbolo en lugar de 1, quintuplicando la tasa sin cambiar chip rate.">
   <div class="slide-full apps-layout">
     <div class="apps-header">
-      <div class="stag">16</div>
+      <div class="stag">15</div>
       <div><h2 class="stitle">GPS y IEEE 802.11b</h2><p class="ssub">Aplicaciones DSSS · C/A Code · Barker-11 · CCK</p></div>
     </div>
     <div class="apps-panels">
@@ -572,6 +640,34 @@
   </div>
 </article>
 
+<!-- S12 RAKE -->
+<article class="slide" id="s12" data-chapter="Receptor RAKE"
+ data-notes="El Receptor RAKE (Price & Green, 1958) resuelve el problema del fading multitrayecto en DSSS. En un canal radio, la señal llega por múltiples trayectos con retardos τ₁...τL y amplitudes a₁...aL. En DSSS, la resolución temporal 1/Rc permite separar llegadas con diferencia de retardo > 1/Rc. En IS-95 (Rc=1.2288Mcps): resolución=813ns=244m. El RAKE usa N fingers (correladores paralelos), cada uno sintonizado al retardo τₖ de una llegada. El MRC Combiner suma las salidas con pesos aₖ* proporcionales a la amplitud estimada: y=Σ aₖ*·xₖ. UMTS W-CDMA usa 3-6 fingers. El multitrayecto — enemigo en banda estrecha — se convierte en aliado en DSSS.">
+  <div class="slide-split-lr">
+    <div class="split-left">
+      <div class="stag">16</div>
+      <h2 class="stitle">Receptor RAKE</h2>
+      <p class="ssub">Diversidad Multitrayecto · MRC Combining</p>
+      <div class="spec-list compact">
+        <div class="sl-row"><div class="sl-k">Resolución temporal</div><div class="sl-v">Δτ<sub>min</sub> = 1/R<sub>c</sub></div></div>
+        <div class="sl-row"><div class="sl-k">IS-95 (1.23 Mcps)</div><div class="sl-v">813 ns ≡ 244 m</div></div>
+        <div class="sl-row"><div class="sl-k">MRC Combiner</div><div class="sl-v">y = Σ aₖ* · xₖ</div></div>
+        <div class="sl-row sl-hi"><div class="sl-k">UMTS W-CDMA</div><div class="sl-v">3—6 fingers activos</div></div>
+      </div>
+      <div class="insight-card green-card">
+        <div class="ic-title">Diversidad Multitrayecto</div>
+        <div class="ic-text">En DSSS, cada llegada multitrayecto es una copia independiente de la señal. El RAKE las combina constructivamente, convirtiendo el fading en ganancia de diversidad.</div>
+      </div>
+      <div class="src">wirelesscommunication.nl · Wikipedia RAKE · DiVA Portal UWB · SE RAKE Path Searcher</div>
+    </div>
+    <div class="split-right col-flex">
+      <div class="chart-lbl">Arquitectura RAKE · N fingers + MRC Combiner</div>
+      <canvas id="rakeCanvas" class="flex-canvas"></canvas>
+    </div>
+  </div>
+</article>
+
+
 <!-- S17 CONCLUSIÓN -->
 <article class="slide" id="s17" data-chapter="Conclusión"
  data-notes="Las Modulaciones de Espectro Ensanchado representan uno de los avances conceptuales más importantes en telecomunicaciones. Nacidas en laboratorios militares — Hedy Lamarr y George Antheil patentaron en 1942 un sistema de salto de frecuencias para torpedos — fueron desclasificadas gradualmente. El GPS (operativo 1978-1995) demuestra el poder del DSSS para extraer señales miles de veces más débiles que el ruido térmico. CDMA IS-95 revolucionó la telefonía celular en 1995. IEEE 802.11b democratizó el Wi-Fi en 1999. Bluetooth AFH resolvió la coexistencia en 2003. Hoy, 5G NR usa secuencias Zadoff-Chu que heredan las propiedades de las PN, y LoRa/CSS lleva el SS al IoT de ultra-largo alcance. Shannon no fue violado — fue reinterpretado brillantemente.">
@@ -602,3 +698,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
