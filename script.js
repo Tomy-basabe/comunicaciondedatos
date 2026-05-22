@@ -1580,7 +1580,6 @@ function animFHSSBlock() {
     {id:'amp', x:.52,y:.22,w:.11,h:.13,label:'Amp RF\nTX',col:'#3d85ff'},
     {id:'ant_tx', x:.66,y:.22,w:.1,h:.13,label:'Antena\nTX',col:'#00c896'},
     {id:'pn', x:.38,y:.55,w:.14,h:.13,label:'Gen. PN\nLFSR',col:'#7c3aed'},
-    {id:'synth', x:.22,y:.55,w:.13,h:.13,label:'Sintet.\nDDS-PLL',col:'#7c3aed'},
     {id:'ant_rx', x:.66,y:.76,w:.1,h:.13,label:'Antena\nRX',col:'#00c896'},
     {id:'mix_rx', x:.52,y:.76,w:.11,h:.13,label:'Mezclador\nRX',col:'#00d4ff'},
     {id:'bpf', x:.38,y:.76,w:.11,h:.13,label:'BPF\nDemod',col:'#3d85ff'},
@@ -1604,11 +1603,9 @@ function animFHSSBlock() {
     { p: [[W*.52,rcy], [W*.49,rcy]], type: 'carrier' },
     // Baseband data RX (Blue)
     { p: [[W*.38,rcy], [W*.35,rcy]], type: 'base' },
-    // PN to Synth
-    { p: [[W*.38,H*.615], [W*.35,H*.615]], type: 'pn' },
-    // Synth to Mixers
-    { p: [[W*.36,H*.615], [W*.435,H*.615], [W*.435,H*.35]], type: 'synth' }, // to TX
-    { p: [[W*.36,H*.615], [W*.575,H*.615], [W*.575,H*.76]], type: 'synth' }, // to RX
+    // PN to Mixers
+    { p: [[W*.45,H*.55], [W*.45,H*.40], [W*.435,H*.40], [W*.435,H*.35]], type: 'pn' }, // to TX
+    { p: [[W*.45,H*.68], [W*.45,H*.71], [W*.575,H*.71], [W*.575,H*.76]], type: 'pn' }  // to RX
   ];
 
   // Initialize particles
