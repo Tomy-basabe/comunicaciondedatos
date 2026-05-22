@@ -3,7 +3,7 @@
    SPREAD SPECTRUM JS ENGINE v3
 ════════════════════════════════════════ */
 
-const TOTAL = 19;
+const TOTAL = 21;
 const TRANS_MS = 800;
 let current = 1;
 let notesOpen = false;
